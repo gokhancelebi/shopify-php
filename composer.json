@@ -1,0 +1,18 @@
+{
+    "name": "gokhancelebi/shopify-php",
+    "autoload": {
+        "psr-4": {
+            "Lib\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Gokhan",
+            "email": "dinatopya03@gmail.com"
+        }
+    ],
+    "require": {
+        "shuchkin/simplecsv": "^0.1.1",
+        "phpoffice/phpspreadsheet": "^1.24"
+    }
+}
