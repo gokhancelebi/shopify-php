@@ -160,4 +160,16 @@ class Product
         $response = self::inventory_level_set($inventory_item_id, $location_id, $available);
         return $response;
     }
+    
+        static function product_inventory_item_cost_set($product_id, $variant_id, $cost)
+    {
+        $inventory_item_id = self::product_inventory_item_id($product_id, $variant_id)->variant->inventory_item_id;
+        $data = ["inventory_item" => ["cost" => $cost]];
+        $url = STORE_DOMAIN . "/admin/api/" . API_VERSION . "/inventory_items/" . $inventory_item_id . ".json";
+        $response = json_decode(http_request($url, $data, "PUT"));
+        if (isset($response->inventory_item)) {
+            return $response->inventory_item;
+        }
+        return false;
+    }
 }
