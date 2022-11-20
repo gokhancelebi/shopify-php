@@ -20,6 +20,15 @@ class Product
         }
         return false;
     }
+    
+    static function add_image($product_id, $image)
+    {
+        $data = ["image" => ['src' => $image]];
+        $url = STORE_DOMAIN . "admin/api/" . API_VERSION . "/products/" . $product_id . "/images.json";
+        $response = json_decode(http_request($url, $data, "POST"));
+
+        return $response;
+    }
 
     /*
      * Retrieve products
