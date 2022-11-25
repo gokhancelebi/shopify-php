@@ -44,11 +44,23 @@ class ProductDB
         return false;
     }
 
-    # add product data to json file
-    public static function add_product($id, $variation_id ,$sku)
+    # get product by title
+    public static function get_product_by_title($title)
     {
         $products = json_decode(file_get_contents(__DIR__ . "/../products.json"), true);
-        $products[] = ["id" => $id, "sku" => $sku, "variation_id" => $variation_id];
+        foreach ($products as $product) {
+            if ($product["data"]["title"] == $title) {
+                return $product;
+            }
+        }
+        return false;
+    }
+
+    # add product data to json file
+    public static function add_product($id, $variation_id ,$sku,$row = [])
+    {
+        $products = json_decode(file_get_contents(__DIR__ . "/../products.json"), true);
+        $products[] = ["id" => $id, "sku" => $sku, "variation_id" => $variation_id,'data' => $row];
         file_put_contents(__DIR__ . "/../products.json", json_encode($products));
     }
 
@@ -104,7 +116,7 @@ class ProductDB
 
             if (isset($data["products"]) && count($data["products"])) {
                 foreach ($data["products"] as $row) {
-                    \Lib\ProductDB::add_product($row["id"], $row["variants"][0]["id"], $row["variants"][0]["sku"]);
+                    \Lib\ProductDB::add_product($row["id"], $row["variants"][0]["id"], $row["variants"][0]["sku"],$row);
                     $since_id = $row["id"];
                 }
             }
