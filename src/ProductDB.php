@@ -93,7 +93,7 @@ class ProductDB
         file_put_contents(__DIR__ . "/../products.json", json_encode([]));
     }
 
-    static function update_product_data()
+ static function update_product_data()
     {
         echo "Product data getting updated" . PHP_EOL;
 
@@ -103,6 +103,8 @@ class ProductDB
 
         $continue = true;
         $since_id = 0;
+
+        $product_data = [];
 
         while ($continue) {
 
@@ -116,11 +118,10 @@ class ProductDB
 
             if (isset($data["products"]) && count($data["products"])) {
                 foreach ($data["products"] as $row) {
-                    \Lib\ProductDB::add_product($row["id"], $row["variants"][0]["id"], $row["variants"][0]["sku"],$row);
+                    $product_data[] = ["id" => $row["id"], "sku" => $row["variants"][0]["sku"], "variation_id" => $row["variants"][0]["id"],'data'=>$row];
                     $since_id = $row["id"];
                 }
             }
-
 
             if (!isset($data["products"]) || count($data["products"]) == 0) {
                 $continue = false;
@@ -131,8 +132,11 @@ class ProductDB
             sleep(1);
         }
 
+        file_put_contents(__DIR__ . "/../products.json", json_encode($product_data));
+
         echo "Product data updated" . PHP_EOL;
     }
+
 
     static function product_count(){
         $products = json_decode(file_get_contents(__DIR__ . "/../products.json"), true);
