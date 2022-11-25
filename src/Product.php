@@ -181,4 +181,93 @@ class Product
         }
         return false;
     }
+    
+    
+    static function create_metafield($namespace, $title, $key, $value, $type = "single_line_text_field", $owner = "PRODUCT")
+    {
+        # metafield definition
+        $data = [
+            "metafield" => [
+                "namespace" => $namespace,
+                "key" => $key,
+                "value" => $value,
+                "type" => "single_line_text_field",
+                "name" => "RAM",
+                "description" => "RAM",
+                "owner_resource" => $owner,
+                "definition" => [
+                    "ownerType" => "PRODUCT",
+                    "owner" => "PRODUCT",
+                    "name" => "Ingredients",
+                    "description" => "RAM",
+                    "type" => "single_line_text_field",
+                ]
+            ]
+        ];
+
+        $url = STORE_DOMAIN . "/admin/api/" . API_VERSION . "/metafields.json";
+
+        $response = json_decode(http_request($url, $data, "POST"));
+
+        return $response;
+
+    }
+
+    static function update_metafield($data){
+        $data = ["metafield" => $data];
+        $url = STORE_DOMAIN . "/admin/api/" . API_VERSION . "/metafields/" . $data['metafield']['id'] . ".json";
+        $response = json_decode(http_request($url, $data, "PUT"));
+        return $response;
+    }
+
+    # documentation : https://shopify.dev/api/admin-rest/2022-07/resources/metafield#post-metafields
+    static function product_add_metafield($product_id, $namespace, $metafield, $value)
+    {
+        $data = [
+            "metafield" => [
+                "namespace" => $namespace,
+                "key" => $metafield,
+                "value" => $value,
+                "type" => "single_line_text_field",
+                "name" => "RAM",
+                "description" => "RAM",
+                "definition" => [
+                    "ownerType" => "PRODUCT",
+                    "owner" => "PRODUCT",
+                    "name" => "Ingredients",
+                    "description" => "RAM",
+                    "type" => "single_line_text_field",
+                ]
+            ]
+        ];
+
+        $url = STORE_DOMAIN . "/admin/api/" . API_VERSION . "/products/" . $product_id . "/metafields.json";
+        $response = json_decode(http_request($url, $data, "POST"));
+
+        return $response;
+
+    }
+
+    # update metafield : https://shopify.dev/api/admin-rest/2022-07/resources/metafield#put-metafields-metafield-id
+    static function product_update_metafield($product_id, $metafield_id, $metafield, $value)
+    {
+
+        $data = [
+            "metafield" => [
+                "namespace" => "inventory",
+                "key" => $metafield,
+                "value" => $value,
+                "type" => "single_line_text_field",
+                "description" => "any"
+            ]
+        ];
+
+        $url = STORE_DOMAIN . "/admin/api/" . API_VERSION . "/products/" . $product_id . "/metafields/" . $metafield_id . ".json";
+        $response = json_decode(http_request($url, $data, "PUT"));
+
+        return $response;
+
+    }
+    
+    
 }
