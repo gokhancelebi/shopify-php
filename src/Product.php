@@ -21,12 +21,11 @@ class Product
         return false;
     }
     
-    static function add_image($product_id, $image)
+    static function add_image($product_id, $image,$variant_ids)
     {
-        $data = ["image" => ['src' => $image]];
+        $data = ["image" => ['src' => $image, 'variant_ids' => [$variant_ids]]];
         $url = STORE_DOMAIN . "admin/api/" . API_VERSION . "/products/" . $product_id . "/images.json";
         $response = json_decode(http_request($url, $data, "POST"));
-
         return $response;
     }
 
