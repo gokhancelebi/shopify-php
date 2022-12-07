@@ -25,6 +25,31 @@ class ProductDB
         }
         return false;
     }
+    
+    public static function get_dublicated_products($sku)
+    {
+        $products = json_decode(file_get_contents(__DIR__ . "/../products.json"), true);
+        $dublicated_products = [];
+        foreach ($products as $product) {
+            if ($product["sku"] == $sku) {
+                $dublicated_products[] = $product;
+            }
+        }
+        return $dublicated_products;
+    }
+
+    # get dublicated count
+    public static function get_dublicated_count($sku)
+    {
+        $products = json_decode(file_get_contents(__DIR__ . "/../products.json"), true);
+        $dublicated_count = 0;
+        foreach ($products as $product) {
+            if ($product["sku"] == $sku) {
+                $dublicated_count++;
+            }
+        }
+        return $dublicated_count;
+    }
 
     public static function get_all_products()
     {
