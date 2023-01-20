@@ -89,4 +89,30 @@ class Collection{
         return false;
     }
 
+        static function collection_products($collection_id)
+    {
+        $since_id = 0;
+        $limit = 250;
+        $continue = true;
+        $products = [];
+        while ($continue) {
+            $url = env('STORE_DOMAIN') . "admin/api/" . env('API_VERSION') . "/collects.json?collection_id=" . $collection_id . "&limit=" . $limit . "&since_id=" . $since_id;
+            $response = json_decode(http_request($url, [], "GET"));
+            if (isset($response->collects)) {
+                $products = array_merge($products, $response->collects);
+                if (count($response->collects) < $limit) {
+                    $continue = false;
+                } else {
+                    $since_id = $response->collects[count($response->collects) - 1]->id;
+                }
+            } else {
+                $continue = false;
+            }
+        }
+        
+        
+        return $products;
+    }
+
+    
 }
