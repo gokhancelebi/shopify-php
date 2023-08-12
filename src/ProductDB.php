@@ -22,9 +22,18 @@ class ProductDB
             if ($product["sku"] == $sku) {
                 return $product["id"];
             }
+
+            // or check it from variation
+            foreach ($product['data']['variants'] as $variant) {
+                if ($variant['sku'] == $sku) {
+                    return $product["id"];
+                }
+            }
         }
+  
         return false;
     }
+
     
     public static function get_dublicated_products($sku)
     {
